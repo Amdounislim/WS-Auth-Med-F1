@@ -1,4 +1,15 @@
-import { USER_LOGIN, USER_LOGIN_FAILED, USER_LOGIN_SUCCESS, USER_REGISTER, USER_REGISTER_FAILED, USER_REGISTER_SUCCESS } from "../constants/actionsTypes"
+import {
+    GET_PROFILE,
+    GET_PROFILE_FAILED,
+    GET_PROFILE_SUCCESS,
+    LOGOUT,
+    USER_LOGIN,
+    USER_LOGIN_FAILED,
+    USER_LOGIN_SUCCESS,
+    USER_REGISTER,
+    USER_REGISTER_FAILED,
+    USER_REGISTER_SUCCESS
+} from "../constants/actionsTypes"
 import axios from "axios"
 
 
@@ -24,5 +35,32 @@ export const userLogin = (userCred) => async (dispatch) => {
         dispatch({ type: USER_LOGIN_SUCCESS, payload: res.data })
     } catch (error) {
         dispatch({ type: USER_LOGIN_FAILED })
+    }
+}
+
+//check if user is authentificated
+export const getProfile = () => async (dispatch) => {
+    dispatch({ type: GET_PROFILE })
+
+    const config = {
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    }
+    try {
+        const res = await axios.get("http://localhost:7000/user/currentUser", config)
+        dispatch({ type: GET_PROFILE_SUCCESS, payload: res.data })
+    } 
+    catch (error) {
+        dispatch({ type: GET_PROFILE_FAILED, payload: error})
+    }
+}
+
+export const logout =()=>(dispatch)=>{
+    dispatch({type:LOGOUT})
+    try {
+        localStorage.removeItem("token")
+    } catch (error) {
+        console.log(error);
     }
 }

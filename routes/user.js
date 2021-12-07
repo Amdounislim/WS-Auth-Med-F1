@@ -10,7 +10,7 @@ Router.post('/register', registerRules(), validator, registerUser)
 
 Router.post('/login', userLogin)
 
-Router.get('/currentuser', isAuth(), function (req, res){
+Router.get('/currentUser', isAuth(), function (req, res){
     res.send(req.user)
 })
 
